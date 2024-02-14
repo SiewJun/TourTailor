@@ -44,10 +44,5 @@ Email: siewkhaijun57@gmail.com
 
 [![Demo Video](https://img.youtube.com/vi/CGZLr_6duiU/0.jpg)](https://youtu.be/CGZLr_6duiU)
 
-## Contact
-For any inquiries or support, please contact:
-Siew Khai Jun
-
-Email: siewkhaijun57@gmail.com
 
 
