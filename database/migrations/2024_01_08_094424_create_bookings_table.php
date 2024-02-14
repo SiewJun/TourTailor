@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained(); // Foreign key to relate the booking to a user
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Add onDelete('cascade')
             $table->foreignId('cart_id')->constrained(); // Foreign key to relate the booking to a cart
             $table->date('booking_date'); // Date when the booking was made
             $table->timestamps();

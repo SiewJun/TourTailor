@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DiscoverController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Package;
 use App\Models\Booking;
 use Illuminate\Http\Request;
@@ -14,6 +15,25 @@ class DashboardController extends Controller
     public function index()
     {
         return view('admin.dashboard.index');
+    }
+
+    public function viewUsers()
+    {
+        $users = User::all(); // Assuming you have a User model
+
+        return view('admin.dashboard.view-users-ajax', compact('users'));
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        // You can customize the response based on your needs
+        return response()->json([
+            'message' => 'User deleted successfully',
+            'userId' => $id,
+        ]);
     }
 
     public function viewPackages()

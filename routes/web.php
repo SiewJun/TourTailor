@@ -51,6 +51,8 @@ Auth::routes();
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Dashboard routes
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('users', [AdminDashboardController::class, 'viewUsers'])->name('admin.dashboard.view-users-ajax');
+    Route::delete('/admin/users/{id}/delete', [AdminDashboardController::class, 'deleteUser'])->name('admin.users.delete');
     Route::get('/packages', [AdminDashboardController::class, 'viewPackages'])->name('admin.dashboard.view-packages');
     Route::get('/packages/create', [AdminDashboardController::class, 'createPackage'])->name('admin.dashboard.create-package');
     Route::post('/packages/store', [AdminDashboardController::class, 'storePackage'])->name('admin.dashboard.store-package');
