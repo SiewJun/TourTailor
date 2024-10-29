@@ -68,7 +68,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 =======
 # Travel Booking Website
 
-Welcome to our Travel Booking Website! This platform allows users to book travel services conveniently.
+Welcome to our Travel Booking Website! This platform allows users to book travel services conveniently for an assignment.
 
 ## Technologies Used:
 
