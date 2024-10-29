@@ -34,39 +34,39 @@ class PaymentController extends Controller
 
     public function handlePaymentSuccess()
 {
-    // Retrieve user and cart details, and create a new booking
+    // Retrieve user and cart details
     $user = Auth::user(); // Get the authenticated user
     $cartItems = Cart::where('user_id', $user->id)->with('package')->get();
-    $totalAmount = $cartItems->sum(function ($cartItem) {
-        return $cartItem->package->price * $cartItem->selected_pax;
-    });
+    $totalAmount = 0; // Initialize total amount
 
-    // Create a new payment with the user ID
-    $payment = Payment::create([
-        'user_id' => $user->id,
-        'payment_method' => 'card', // You may get this information from the Stripe response
-    ]);
-
-    // Associate cart items with the payment
     foreach ($cartItems as $cartItem) {
-        $amount = $cartItem->package->price * $cartItem->selected_pax;
-        $payment->carts()->attach($cartItem->id, ['amount' => $amount]);
+        $amount = $cartItem->package->price * $cartItem->selected_pax; // Calculate amount for this cart item
+        $totalAmount += $amount; // Add to total amount
 
-        // Create a new booking for each cart item
+        // Create a new payment for the cart item
+        $payment = Payment::create([
+            'user_id' => $user->id,
+            'payment_method' => 'card', // You may get this information from the Stripe response
+            'cart_id' => $cartItem->id, // Link this payment to the specific cart item
+            'amount' => $amount, // Store the amount for the payment
+        ]);
+
+        // Create a new booking for this cart item
         Booking::create([
             'user_id' => $user->id,
             'cart_id' => $cartItem->id,
             'booking_date' => now(),
         ]);
+    }
 
-        // Dissociate the user from the cart
-        $cartItem->user_id = null;
-        $cartItem->save();
+    // After processing payments, dissociate the user from the cart
+    foreach ($cartItems as $cartItem) {
+        $cartItem->user_id = null; // Set user_id to NULL after payment
+        $cartItem->save(); // Save changes
     }
 
     return view('user.payment.success', compact('totalAmount'));
 }
-
 
     public function handlePaymentCancel()
     {

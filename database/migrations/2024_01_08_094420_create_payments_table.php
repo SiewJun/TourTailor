@@ -16,6 +16,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Add user ID
+            $table->foreignId('cart_id')->constrained()->onDelete('cascade'); // Add cart ID
             $table->string('payment_method'); // Payment method (e.g., credit card, PayPal)
             $table->timestamps();
         });
@@ -35,15 +36,19 @@ class CreatePaymentsTable extends Migration
      * @return void
      */
     public function down()
-    {
+{
+    // Check if the 'payment_cart' table exists before dropping foreign keys
+    if (Schema::hasTable('payment_cart')) {
         Schema::table('payment_cart', function (Blueprint $table) {
             $table->dropForeign(['payment_id']);
             $table->dropForeign(['cart_id']);
         });
 
-        Schema::dropIfExists('payments');
         Schema::dropIfExists('payment_cart');
     }
+
+    Schema::dropIfExists('payments');
+}
 }
 
 
